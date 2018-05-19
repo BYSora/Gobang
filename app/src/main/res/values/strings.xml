@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Gobang</string>
+    <string name="restart">再来一局</string>
+</resources>
