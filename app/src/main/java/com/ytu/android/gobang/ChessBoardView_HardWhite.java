@@ -31,7 +31,8 @@ public class ChessBoardView_HardWhite extends View {
     // 记录黑白棋子位置的列表
     private ArrayList<Point> mWhiteArray = new ArrayList<>();
     private ArrayList<Point> mBlackArray = new ArrayList<>();
-    private Point mCurrentPoint = new Point();
+    private Point mCurrentPointW = new Point();
+    private Point mCurrentPointB = new Point();
     // 游戏是否结束
     private boolean mIsGameOver;
     // 游戏结束，是否是白色方胜利
@@ -145,7 +146,7 @@ public class ChessBoardView_HardWhite extends View {
             float left = (blackPoint.x + (1 - ratioPieceOfLineHeight) / 2) * maxLineHeight;
             float top = (blackPoint.y + (1 - ratioPieceOfLineHeight) / 2) * maxLineHeight;
             canvas.drawBitmap(mBlackPiece, left, top, null);
-            if(blackPoint == mCurrentPoint)
+            if(blackPoint == mCurrentPointB)
                 canvas.drawBitmap(mCurrentPiece, left, top, null);
         }
     }
@@ -201,6 +202,7 @@ public class ChessBoardView_HardWhite extends View {
             }
             if (mIsWhite) {
                 mWhiteArray.add(point);
+                mCurrentPointW = point;
             }
             invalidate();
             mIsWhite = !mIsWhite;
@@ -217,7 +219,7 @@ public class ChessBoardView_HardWhite extends View {
                     return true;
                 }
                 mBlackArray.add(point1);
-                mCurrentPoint = point1;
+                mCurrentPointB = point1;
                 mIsWhite = !mIsWhite;
                 invalidate();
             }
@@ -275,5 +277,16 @@ public class ChessBoardView_HardWhite extends View {
         Point point = new Point(7,7);
         mBlackArray.add(point);
         invalidate();
+    }
+
+    //悔棋
+    public void fun() {
+        if(mWhiteArray.size()>=1&&!mIsGameOver) {
+            mBlackArray.remove(mBlackArray.size()-1);
+            mWhiteArray.remove(mWhiteArray.size()-1);
+            invalidate();
+        }else{
+            Toast.makeText(getContext(),"无法悔棋！",Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -24,6 +24,10 @@ public class MainActivity_SimpleWhite extends AppCompatActivity{
             mChessBoardViewSimpleWhite.start();
             return true;
         }
+        if(id == R.id.action_cancel) {
+            mChessBoardViewSimpleWhite.fun();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

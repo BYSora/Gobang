@@ -24,6 +24,9 @@ public class MainActivity_HardBlack extends AppCompatActivity{
             mChessBoardViewHardBlack.start();
             return true;
         }
+        if(id == R.id.action_cancel) {
+            mChessBoardViewHardBlack.fun();
+        }
         return super.onOptionsItemSelected(item);
     }
 

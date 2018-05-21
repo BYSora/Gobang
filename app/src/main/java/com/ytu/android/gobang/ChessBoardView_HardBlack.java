@@ -12,12 +12,12 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.content.Context.MODE_WORLD_WRITEABLE;
 
 public class ChessBoardView_HardBlack extends View {
     // 棋盘的宽度，也是长度
@@ -35,7 +35,8 @@ public class ChessBoardView_HardBlack extends View {
     // 记录黑白棋子位置的列表
     private ArrayList<Point> mWhiteArray = new ArrayList<>();
     private ArrayList<Point> mBlackArray = new ArrayList<>();
-    private Point mCurrentPoint = new Point();
+    private Point mCurrentPointB = new Point();
+    private Point mCurrentPointW = new Point();
 
     // 游戏是否结束
     private boolean mIsGameOver;
@@ -148,7 +149,7 @@ public class ChessBoardView_HardBlack extends View {
             float left = (whitePoint.x + (1 - ratioPieceOfLineHeight) / 2) * maxLineHeight;
             float top = (whitePoint.y + (1 - ratioPieceOfLineHeight) / 2) * maxLineHeight;
             canvas.drawBitmap(mWhitePiece, left, top, null);
-            if(whitePoint == mCurrentPoint)
+            if(whitePoint == mCurrentPointW)
                 canvas.drawBitmap(mCurrentPiece, left, top, null);
         }
 
@@ -204,6 +205,7 @@ public class ChessBoardView_HardBlack extends View {
             }
             if (!mIsWhite) {
                 mBlackArray.add(point);
+                mCurrentPointB = point;
             }
             invalidate();
             mIsWhite = !mIsWhite;
@@ -214,11 +216,11 @@ public class ChessBoardView_HardBlack extends View {
                     if (mBlackArray.get(0).x != 0) {
                         Point point1 = new Point(mBlackArray.get(0).x - 1, mBlackArray.get(0).y);
                         mWhiteArray.add(point1);
-                        mCurrentPoint = point1;
+                        mCurrentPointW = point1;
                     } else {
                         Point point1 = new Point(mBlackArray.get(0).x + 1, mBlackArray.get(0).y);
                         mWhiteArray.add(point1);
-                        mCurrentPoint = point1;
+                        mCurrentPointW = point1;
                     }
                 } else if (mBlackArray.size() != 0) {
                     HardBlackAI ai = new HardBlackAI(mBlackArray, mWhiteArray);
@@ -231,7 +233,7 @@ public class ChessBoardView_HardBlack extends View {
                         return true;
                     }
                     mWhiteArray.add(point1);
-                    mCurrentPoint = point1;
+                    mCurrentPointW = point1;
                 }
                 mIsWhite = !mIsWhite;
                 invalidate();
@@ -288,5 +290,16 @@ public class ChessBoardView_HardBlack extends View {
         mIsWhiteWinner = false;
         mIsWhite = false;
         invalidate();
+    }
+
+    //悔棋
+    public void fun() {
+        if(mBlackArray.size()>=1&&!mIsGameOver) {
+            mBlackArray.remove(mBlackArray.size()-1);
+            mWhiteArray.remove(mWhiteArray.size()-1);
+            invalidate();
+        }else{
+            Toast.makeText(getContext(),"无法悔棋！",Toast.LENGTH_SHORT).show();
+        }
     }
 }

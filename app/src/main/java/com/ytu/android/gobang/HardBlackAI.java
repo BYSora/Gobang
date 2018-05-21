@@ -8,6 +8,7 @@ public class HardBlackAI {
     final private int mBlack = 1,mWhite = 2;
     final private int[][] mChessBoard = new int[15][15];
     final private int INF = 0x3f3f3f3f;
+    int si = -1, sj = -1;
 
     HardBlackAI(List<Point> player, List<Point> AI) {
         for(int i = 0, n = player.size(); i < n; i++) {
@@ -44,6 +45,19 @@ public class HardBlackAI {
     public Point play(){
         int ans = -INF, mi = 0 , mj = 0, f;
         int[][] tmp = new int[15][15];
+
+        for(int i = 0; i < 15; i++) {
+            for(int j = 0; j < 15; j++) {
+                if(mChessBoard[i][j] == 0) {
+                    mChessBoard[i][j] = mWhite;
+                    if(check(mWhite,mChessBoard))
+                        return new Point(i,j);
+                    else
+                        mChessBoard[i][j] = 0;
+                }
+            }
+        }
+
         for(int i = 0; i < 15; i++) {
             for(int j = 0; j < 15; j++) {
                 if(mChessBoard[i][j] == 0) {
@@ -57,6 +71,8 @@ public class HardBlackAI {
                         }
                         if(f == INF && check(mWhite,tmp))
                             return new Point(i, j);
+                        if(f == -INF && si != -1)
+                            return new Point(si,sj);
                         if(f > ans) {
                             ans = f;
                             mi = i;
@@ -87,6 +103,8 @@ public class HardBlackAI {
                         mcopy(tmp, A);
                         tmp[i][j] = mBlack; //模拟对手下
                         if(check(mBlack,tmp)) {
+                            si = i;
+                            sj = j;
                             return -INF;
                         }else {
                             num = play1(tmp,ans);
@@ -151,38 +169,35 @@ public class HardBlackAI {
 
     //检查是否有五子连珠
     private boolean check(int piece, int tmp[][]) {
-        for(int i = 0; i < 15; i++) { //水平方向
-            for(int j = 0; j < 11; j++) {
-                if(tmp[i][j]==piece&&tmp[i][j+1]==piece&&tmp[i][j+2]==piece
-                        &&tmp[i][j+3]==piece&&tmp[i][j+4]==piece) {
-                    return true;
+        for(int i = 0; i < 15; i++)
+            for(int j = 0; j < 15; j++){
+                if(tmp[i][j] == piece) {
+                    if (i <= 10) {
+                        if (tmp[i + 4][j] == piece && tmp[i][j] == piece && tmp[i + 1][j] == piece
+                                && tmp[i + 2][j] == piece && tmp[i + 3][j] == piece) {
+                            return true;
+                        }
+                    }
+                    if (j <= 10) {
+                        if (tmp[i][j + 4] == piece && tmp[i][j] == piece && tmp[i][j + 1] == piece
+                                && tmp[i][j + 2] == piece && tmp[i][j + 3] == piece) {
+                            return true;
+                        }
+                    }
+                    if (i <= 10 && j <= 10) {
+                        if (tmp[i + 4][j + 4] == piece && tmp[i][j] == piece && tmp[i + 1][j + 1] == piece
+                                && tmp[i + 2][j + 2] == piece && tmp[i + 3][j + 3] == piece) {
+                            return true;
+                        }
+                    }
+                    if (i >= 4 && j <= 10) {
+                        if (tmp[i - 4][j + 4] == piece && tmp[i][j] == piece && tmp[i - 1][j + 1] == piece
+                                && tmp[i - 2][j + 2] == piece && tmp[i - 3][j + 3] == piece) {
+                            return true;
+                        }
+                    }
                 }
             }
-        }
-        for(int i = 0; i < 11; i++) { //垂直方向
-            for(int j = 0; j < 15; j++) {
-                if(tmp[i][j]==piece&&tmp[i+1][j]==piece&&tmp[i+2][j]==piece
-                        &&tmp[i+3][j]==piece&&tmp[i+4][j]==piece) {
-                    return true;
-                }
-            }
-        }
-        for(int i = 0; i < 11; i++) { //正斜方向
-            for(int j = 0; j < 11; j++) {
-                if(tmp[i][j]==piece&&tmp[i+1][j+1]==piece&&tmp[i+2][j+2]==piece
-                        &&tmp[i+3][j+3]==piece&&tmp[i+4][j+4]==piece) {
-                    return true;
-                }
-            }
-        }
-        for(int i = 0; i < 11; i++){
-            for(int j = 14; j > 3; j--) { //反斜方向
-                if(tmp[i][j]==piece&&tmp[i+1][j-1]==piece&&tmp[i+2][j-2]==piece
-                        &&tmp[i+3][j-3]==piece&&tmp[i+4][j-4]==piece) {
-                    return true;
-                }
-            }
-        }
         return false;
     }
 

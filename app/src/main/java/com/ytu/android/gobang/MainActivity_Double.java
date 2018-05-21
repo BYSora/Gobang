@@ -23,6 +23,10 @@ public class MainActivity_Double extends AppCompatActivity {
             mChessBoardViewDouble.start();
             return true;
         }
+        if(id == R.id.action_cancel) {
+            mChessBoardViewDouble.fun();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

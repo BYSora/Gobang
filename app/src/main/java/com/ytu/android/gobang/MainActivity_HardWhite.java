@@ -23,6 +23,10 @@ public class MainActivity_HardWhite extends AppCompatActivity {
             mChessBoardViewHardWhite.start();
             return true;
         }
+        if(id == R.id.action_cancel) {
+            mChessBoardViewHardWhite.fun();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

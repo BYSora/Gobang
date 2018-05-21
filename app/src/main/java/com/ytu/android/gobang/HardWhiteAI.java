@@ -46,6 +46,19 @@ public class HardWhiteAI {
     public Point play(){
         int ans = -INF, mi = 0 , mj = 0, f;
         int[][] tmp = new int[15][15];
+
+        for(int i = 0; i < 15; i++) {
+            for(int j = 0; j < 15; j++) {
+                if(mChessBoard[i][j] == 0) {
+                    mChessBoard[i][j] = mBlack;
+                    if(check(mBlack,mChessBoard))
+                        return new Point(i,j);
+                    else
+                        mChessBoard[i][j] = 0;
+                }
+            }
+        }
+
         for(int i = 0; i < 15; i++) {
             for(int j = 0; j < 15; j++) {
                 if(mChessBoard[i][j] == 0) {
@@ -160,38 +173,35 @@ public class HardWhiteAI {
 
     //检查是否有五子连珠
     private boolean check(int piece, int tmp[][]) {
-        for(int i = 0; i < 15; i++) { //水平方向
-            for(int j = 0; j < 11; j++) {
-                if(tmp[i][j]==piece&&tmp[i][j+1]==piece&&tmp[i][j+2]==piece
-                        &&tmp[i][j+3]==piece&&tmp[i][j+4]==piece) {
-                    return true;
+        for(int i = 0; i < 15; i++)
+            for(int j = 0; j < 15; j++){
+                if(tmp[i][j] == piece) {
+                    if (i <= 10) {
+                        if (tmp[i + 4][j] == piece && tmp[i][j] == piece && tmp[i + 1][j] == piece
+                                && tmp[i + 2][j] == piece && tmp[i + 3][j] == piece) {
+                            return true;
+                        }
+                    }
+                    if (j <= 10) {
+                        if (tmp[i][j + 4] == piece && tmp[i][j] == piece && tmp[i][j + 1] == piece
+                                && tmp[i][j + 2] == piece && tmp[i][j + 3] == piece) {
+                            return true;
+                        }
+                    }
+                    if (i <= 10 && j <= 10) {
+                        if (tmp[i + 4][j + 4] == piece && tmp[i][j] == piece && tmp[i + 1][j + 1] == piece
+                                && tmp[i + 2][j + 2] == piece && tmp[i + 3][j + 3] == piece) {
+                            return true;
+                        }
+                    }
+                    if (i >= 4 && j <= 10) {
+                        if (tmp[i - 4][j + 4] == piece && tmp[i][j] == piece && tmp[i - 1][j + 1] == piece
+                                && tmp[i - 2][j + 2] == piece && tmp[i - 3][j + 3] == piece) {
+                            return true;
+                        }
+                    }
                 }
             }
-        }
-        for(int i = 0; i < 11; i++) { //垂直方向
-            for(int j = 0; j < 15; j++) {
-                if(tmp[i][j]==piece&&tmp[i+1][j]==piece&&tmp[i+2][j]==piece
-                        &&tmp[i+3][j]==piece&&tmp[i+4][j]==piece) {
-                    return true;
-                }
-            }
-        }
-        for(int i = 0; i < 11; i++) { //正斜方向
-            for(int j = 0; j < 11; j++) {
-                if(tmp[i][j]==piece&&tmp[i+1][j+1]==piece&&tmp[i+2][j+2]==piece
-                        &&tmp[i+3][j+3]==piece&&tmp[i+4][j+4]==piece) {
-                    return true;
-                }
-            }
-        }
-        for(int i = 0; i < 11; i++){
-            for(int j = 14; j > 3; j--) { //反斜方向
-                if(tmp[i][j]==piece&&tmp[i+1][j-1]==piece&&tmp[i+2][j-2]==piece
-                        &&tmp[i+3][j-3]==piece&&tmp[i+4][j-4]==piece) {
-                    return true;
-                }
-            }
-        }
         return false;
     }
 

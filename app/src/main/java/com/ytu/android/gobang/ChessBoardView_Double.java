@@ -241,4 +241,15 @@ public class ChessBoardView_Double extends View {
         mIsWhite = false;
         invalidate();
     }
+
+    //悔棋
+    public void fun() {
+        if(mBlackArray.size()>=1&&!mIsGameOver) {
+            mBlackArray.remove(mBlackArray.size()-1);
+            mWhiteArray.remove(mWhiteArray.size()-1);
+            invalidate();
+        }else{
+            Toast.makeText(getContext(),"无法悔棋！",Toast.LENGTH_SHORT).show();
+        }
+    }
 }
